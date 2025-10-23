@@ -15,9 +15,9 @@ import sys
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 #Your Filename
-filename = "datasets/KN_results.csv"
+filename = "datasets/KN_fixed_results.csv"
 format_based_on_filename = False
-alternate_title = "CCR3_plot"
+alternate_title = "MHVY_fixed_heatmap"
 
 #quality control and formatting
 well_positions = False #if you only have well positions and want the heatmap plotted per well
@@ -35,11 +35,11 @@ Pal = sns.light_palette("#bb334c", as_cmap=True)
 
 #x and y axis data (these must match your column names EXACTLY)
 x_val = "Sample Name"
-heat_val = "CCR3"
+heat_val = "MHV-Y"
 y_val = "Infection"
 
 #plot formatting
-title = "CCR3"
+title = "MHV-Y"
 rotate = 0
 
 ####################################################################################################
@@ -110,5 +110,5 @@ plt.setp(g.get_yticklabels(), rotation=rotate)
 plt.tight_layout()
 plt.title(title)
 plt.show()
-#fig = g.figure
-#fig.savefig(myOutput)
+fig = g.figure
+fig.savefig(myOutput)

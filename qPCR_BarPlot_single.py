@@ -15,9 +15,9 @@ import re
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 #Your Filename
-filename = "datasets/KN_results.csv"
+filename = "datasets/KN_fixed_results.csv"
 format_based_on_filename = False
-alternate_title = "CCR3_plot"
+alternate_title = "MHVY_fixed_barplot"
 
 #The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TissueOrder = ["Adipose Tissue","Cecum","Distal Colon","Liver","mLN","Omentum","PP","Proximal Colon","SI Zone A","SI Zone B","SI Zone C","SI Zone D","SI Zone E","Spleen"]	
@@ -31,12 +31,12 @@ white_overlay_palette = "Sample Name"
 
 #x and y axis data (these must match your column names EXACTLY)
 x_vals = "Sample Name"
-y_vals = "CCR3"
+y_vals = "MHV-Y"
 bar_split = "Infection"
 
 #plot formatting
 axis_rotate = 90
-title = "CCR3"
+title = "MHVY"
 
 ####################################################################################################
 
@@ -150,5 +150,5 @@ ax.set_title(title)
 g.set_xlabels("")
 g.set_ylabels("")   
 
-#plt.show()
+plt.show()
 plt.savefig(mySVGOut,bbox_inches="tight")          #saves the file to the generated_images folder
