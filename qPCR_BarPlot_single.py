@@ -63,7 +63,6 @@ if format_based_on_filename == True:
     mySVGOut = my_output_file(filename, plot_type="Bar",extension="svg")  #Generates a regular expression to automate the output filename
 else:
     mySVGOut = my_output_file(alternate_title, plot_type="Bar",extension="svg",csv=False)
-    print(mySVGOut)
 
 # READ IN THE DATA
 DataSet = pd.read_csv(filename,header=0)       #Creates a 2D editable table

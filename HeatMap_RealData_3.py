@@ -65,7 +65,12 @@ def my_output_file(filename: str, plot_type: str ="Plot", extension: str="svg", 
 
 # OPEN FILES AND GENERATE PATH NAMES
 myCSV = filename            # use this if you have access to this script directly
-myOutput = my_output_file(title, plot_type="HeatMap")
+
+if format_based_on_filename == True:
+    mySVGOut = my_output_file(filename, plot_type="Heatmap",extension="svg")  #Generates a regular expression to automate the output filename
+else:
+    mySVGOut = my_output_file(alternate_title, plot_type="Heatmap",extension="svg",csv=False)
+
 
 # READ IN THE DATA
 DataSet = pd.read_csv(myCSV)
@@ -111,4 +116,4 @@ plt.tight_layout()
 plt.title(title)
 plt.show()
 fig = g.figure
-fig.savefig(myOutput)
+fig.savefig(mySVGOut)
