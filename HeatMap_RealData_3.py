@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Creates a HeatMap based on a provided dataset."""
+"""Creates a HeatMap based on a provided dataset, with editable functions."""
 
 # NECESSARY IMPORTS
 import seaborn as sns
