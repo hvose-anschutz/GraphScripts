@@ -26,8 +26,6 @@ Note that in both options, you should only give the title of the file, not the f
 
 - If you generate any images (which I believe all figure-saving commands are un-commented by default), they will be saved to the `generated-images` folder. If you move that folder, it might throw an error. 
 
-- If you're on a Linux distribution (like Ubuntu), there's a nonzero chance that the `plt.show()` commands will not work at all. This has to do with the backend of matplotlib, and I'm currently working on understanding why it does that. You should be able to view the saved figure anyways.
-
-- If you want to write your own scripts and make use of my pre-built functions, you must make them in the `GraphScripts` folder. This is the only structure where python can recognize this setup (and unfortunately that's not my limitations; that's just how python works for this use case.)
+- If you're on a Linux distribution (like Ubuntu), there's a nonzero chance that the `plt.show()` commands will not work at all. Additionally, there is a chance that using `plt.show()` will cause saved plots to end up empty. If `debug_show_plot` is true, know that the saved figure may end up empty.
 
 - Not sure what a function does? In an IDE, you should be able to hover over a function and see the parameters it takes, their data types, and their expected outputs (along with a basic description of the functionality.) I've done my best to implement this for all of my functions that I've written, though some of the descriptions might not be the most...descriptive as of now. If you have questions, feel free to ask me what's up.
