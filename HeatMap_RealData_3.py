@@ -23,6 +23,7 @@ alternate_title = "MHVY_fixed_heatmap"
 well_positions = False #if you only have well positions and want the heatmap plotted per well
 q_filtering = True #filter cell values based on quantile thresholing
 q_val = 0.95 #if q filtering, the threshold to set the filter to
+debug_show_plot = False #set to True if you want to view the plot locally. May break plot save.
 
 #The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TissueOrder = ["Adipose Tissue","Cecum","Distal Colon","Liver","mLN","Omentum","PP","Proximal Colon","SI Zone A","SI Zone B","SI Zone C","SI Zone D","SI Zone E","Spleen"]	
@@ -114,6 +115,8 @@ g = sns.heatmap(heatmap_data,
 plt.setp(g.get_yticklabels(), rotation=rotate)
 plt.tight_layout()
 plt.title(title)
-plt.show()
+
+if debug_show_plot == True:
+    plt.show()
 fig = g.figure
-fig.savefig(mySVGOut)
+fig.savefig(mySVGOut,bbox_inches="tight")

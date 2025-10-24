@@ -19,6 +19,9 @@ filename = "datasets/KN_fixed_results.csv"
 format_based_on_filename = False
 alternate_title = "MHVY_fixed_barplot"
 
+#formatting and debugging
+debug_show_plot = False #Set to True if you want to view the plot locally. May break saved file.
+
 #The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TissueOrder = ["Adipose Tissue","Cecum","Distal Colon","Liver","mLN","Omentum","PP","Proximal Colon","SI Zone A","SI Zone B","SI Zone C","SI Zone D","SI Zone E","Spleen"]	
 
@@ -149,5 +152,6 @@ ax.set_title(title)
 g.set_xlabels("")
 g.set_ylabels("")   
 
-plt.show()
+if debug_show_plot == True:
+    plt.show()
 plt.savefig(mySVGOut,bbox_inches="tight")          #saves the file to the generated_images folder
