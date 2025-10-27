@@ -19,6 +19,7 @@ TreatmentOrder = ["ControlDiet","HiFiDiet"]
 x_val = "Time"
 y_val = "Copies"
 hue_val = "Condition"
+color_for_white_overlay = "Treatment"
 
 x_tick_list = [8, 16, 24, 48]
 ####################################################################################################
@@ -34,7 +35,7 @@ DataSet = pd.read_csv(myCSV,index_col = 0)
 
 # GET THE COLOR SCHEMES FOR THE DATASET
 my_color_wheel = myfunc.get_default_wheel()
-white_wheel = myfunc.get_white_wheel(DataSet, "Treatment")
+white_wheel = myfunc.get_white_wheel(DataSet, color_for_white_overlay)
 
 # GENERATE THE LINE PLOT
 g = sns.lineplot(
