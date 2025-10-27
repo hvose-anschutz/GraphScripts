@@ -6,6 +6,7 @@
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import os
 import math
 import re
@@ -32,7 +33,9 @@ TissueOrder = ["Adipose Tissue","Cecum","Distal Colon","Liver","mLN","Omentum","
 TreatmentOrder = ["Uninfected","MHV-Y","yHV68","yHV68 + MHV-Y"]
 
 #Color Customization (sets the max value for the heatmap and generates a colormap)
-Pal = sns.light_palette("#bb334c", as_cmap=True) 
+thresholding = False #determines if all values under a certain threshold should be the same color
+threshold = 1.32
+top_color = "#bb334c"
 
 #x and y axis data (these must match your column names EXACTLY)
 x_val = "Sample Name"
@@ -96,6 +99,15 @@ else:
 
 
 # SET AESTHETICS
+Pal = sns.light_palette("#bb334c", as_cmap=True)
+
+if thresholding == False:
+    vmin_val = 0 
+else:
+    vmin_val = threshold
+    Pal.set_under(color="#ffffff")
+
+
 #lut = dict(zip(TnType.unique(), "rbg"))
 #row_col = TnType.map(lut)
 #Sets color palette to be in the range from White to a Saturated Color, should be set to the color of the year
@@ -103,7 +115,7 @@ else:
 # GENERATE THE HEATMAP
 g = sns.heatmap(heatmap_data,
 			cmap = Pal, #Determines the colormap based on a provided palette (see above)
-			vmin = 0,  #Sets the minimum value for the lowest saturation of the color bar
+			vmin = vmin_val,  #Sets the minimum value for the lowest saturation of the color bar
 			vmax = vmax_val,  #Sets the maximum value for the highest saturation of the color bar
             linewidths=.5,
             xticklabels=True,
