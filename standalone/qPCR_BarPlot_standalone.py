@@ -15,9 +15,9 @@ import re
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 #Your Filename
-filename = "datasets/KN_fixed_results.csv"
+filename = "../datasets/yHV68_MHVY_chal_Rep1.csv"
 format_based_on_filename = False
-alternate_title = "MHVY_fixed_barplot"
+alternate_title = "MHVY_Rep1_barplot"
 
 #formatting and debugging
 debug_show_plot = False #Set to True if you want to view the plot locally. May break saved file.
@@ -30,16 +30,20 @@ TreatmentOrder = ["Uninfected","MHV-Y","yHV68","yHV68 + MHV-Y"]
 
 #Color Customization (the white_overlay_palette should match the bar_split)
 custom_colors = ["#AE3899","#CF92DD","#009933","#EDAB21"]
-white_overlay_palette = "Sample Name"
+white_overlay_palette = "Tissue"
+
+#Thresholding
+thresholding = True
+q = 0.95
 
 #x and y axis data (these must match your column names EXACTLY)
-x_vals = "Sample Name"
+x_vals = "Tissue"
 y_vals = "MHV-Y"
 bar_split = "Infection"
 
 #plot formatting
 axis_rotate = 90
-title = "MHVY"
+title = "MHVY Threshold"
 
 ####################################################################################################
 
@@ -54,7 +58,7 @@ def my_output_file(filename: str, plot_type: str ="Plot", extension: str="svg", 
                 new_name = re.sub(".csv$","_Image" + plot_type + "." + extension, just_name[::-1][0],1)
             else:
                 new_name = filename + "_Image" + plot_type + "." + extension
-            return os.getcwd() + "/generated_images/" + new_name
+            return os.getcwd() + "/" + new_name
     except AttributeError:
         print("_io.TextIOWrapper object has no attribute 'split'. Double check that the filename passed is a string.")
         sys.exit(1)
@@ -73,11 +77,12 @@ DataSet = pd.read_csv(filename,header=0)       #Creates a 2D editable table
 #DataSet[(np.abs(stats.zscore(DataSet)) < 3).all(axis=1)]
 
 # ATTEMPT TO REMOVE OUTLIERS
+if thresholding == True:
+    q_val = DataSet[y_vals].quantile(q)
 
-#q = DataSet[y_vals].quantile(0.95)
-
-#final_df = DataSet[DataSet[y_vals] < q]
-final_df = DataSet
+    final_df = DataSet[DataSet[y_vals] < q_val]
+else:
+    final_df = DataSet
 
 # separate out the relative sample distinctions (need them to be separate for labeling purposes)
 #DataSet[['Mouse', 'Tissue']] = DataSet['Tissue & Sample ID'].str.split(' - ', n=1, expand=True)

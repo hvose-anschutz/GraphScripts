@@ -16,8 +16,8 @@ import sys
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 #Your Filename
-filename = "datasets/KN_fixed_results.csv"
-format_based_on_filename = False
+filename = "../datasets/yHV68_MHVY_chal_Rep1.csv"
+format_based_on_filename = True
 alternate_title = "MHVY_fixed_heatmap"
 
 #quality control and formatting
@@ -27,7 +27,7 @@ q_val = 0.95 #if q filtering, the threshold to set the filter to
 debug_show_plot = False #set to True if you want to view the plot locally. May break plot save.
 
 #The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
-TissueOrder = ["Adipose Tissue","Cecum","Distal Colon","Liver","mLN","Omentum","PP","Proximal Colon","SI Zone A","SI Zone B","SI Zone C","SI Zone D","SI Zone E","Spleen"]	
+TissueOrder = ["Adipose Tissue Mat","Cecum","Distal Colon","Liver","mLN","Omentum","PP","Proximal Colon","SI Zone A","SI Zone B","SI Zone C","SI Zone D","SI Zone E","Spleen"]	
 
 #Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
 TreatmentOrder = ["Uninfected","MHV-Y","yHV68","yHV68 + MHV-Y"]
@@ -38,13 +38,14 @@ threshold = 1.32
 top_color = "#bb334c"
 
 #x and y axis data (these must match your column names EXACTLY)
-x_val = "Sample Name"
-heat_val = "MHV-Y"
+x_val = "Tissue"
+heat_val = "CCR3"
 y_val = "Infection"
 
 #plot formatting
-title = "MHV-Y"
-rotate = 0
+title = "CCR3"
+rotate_x = 90
+rotate_y = 0
 
 ####################################################################################################
 
@@ -62,7 +63,7 @@ def my_output_file(filename: str, plot_type: str ="Plot", extension: str="svg", 
                 new_name = re.sub(".csv$","_Image" + plot_type + "." + extension, just_name[::-1][0],1)
             else:
                 new_name = filename + "_Image" + plot_type + "." + extension
-            return os.getcwd() + "/generated_images/" + new_name
+            return os.getcwd() + "/" + new_name
     except AttributeError:
         print("_io.TextIOWrapper object has no attribute 'split'. Double check that the filename passed is a string.")
         sys.exit(1)
@@ -124,7 +125,8 @@ g = sns.heatmap(heatmap_data,
 
 # OUTPUT AND SAVE THE PLOT
 #g.ax_row_dendrogram.remove()    #removes the dendrogram from the plot (if needed)
-plt.setp(g.get_yticklabels(), rotation=rotate)
+plt.setp(g.get_xticklabels(), rotation=rotate_x)
+plt.setp(g.get_yticklabels(), rotation=rotate_y)
 plt.tight_layout()
 plt.title(title)
 
