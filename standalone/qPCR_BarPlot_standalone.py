@@ -32,8 +32,8 @@ TreatmentOrder = ["Uninfected","MHV-Y","yHV68","yHV68 + MHV-Y"]
 custom_colors = ["#AE3899","#CF92DD","#009933","#EDAB21"]
 white_overlay_palette = "Tissue"
 
-#Thresholding
-thresholding = True
+#q_filtering
+q_filtering = True
 q = 0.95
 
 #x and y axis data (these must match your column names EXACTLY)
@@ -77,7 +77,7 @@ DataSet = pd.read_csv(filename,header=0)       #Creates a 2D editable table
 #DataSet[(np.abs(stats.zscore(DataSet)) < 3).all(axis=1)]
 
 # ATTEMPT TO REMOVE OUTLIERS
-if thresholding == True:
+if q_filtering == True:
     q_val = DataSet[y_vals].quantile(q)
 
     final_df = DataSet[DataSet[y_vals] < q_val]
