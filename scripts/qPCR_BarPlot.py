@@ -15,9 +15,9 @@ import re
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 #Your Filename
-filename = "datasets/KN_fixed_results.csv"
+filename = "datasets/yHV68_MHVY_chal_Rep1.csv"
 format_based_on_filename = False
-alternate_title = "MHVY_fixed_barplot"
+alternate_title = "MHVY_Rep1_barplot"
 
 #formatting and debugging
 debug_show_plot = False #Set to True if you want to view the plot locally. May break saved file.
@@ -30,10 +30,10 @@ TreatmentOrder = ["Uninfected","MHV-Y","yHV68","yHV68 + MHV-Y"]
 
 #Color Customization (the white_overlay_palette should match the bar_split)
 custom_colors = ["#AE3899","#CF92DD","#009933","#EDAB21"]
-white_overlay_palette = "Sample Name"
+white_overlay_palette = "Tissue"
 
 #x and y axis data (these must match your column names EXACTLY)
-x_vals = "Sample Name"
+x_vals = "Tissue"
 y_vals = "MHV-Y"
 bar_split = "Infection"
 
