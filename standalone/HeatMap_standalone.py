@@ -17,12 +17,12 @@ import sys
 
 #Your Filename
 filename = "../datasets/yHV68_MHVY_chal_Rep1.csv"
-format_based_on_filename = True
-alternate_title = "MHVY_fixed_heatmap"
+format_based_on_filename = False
+alternate_title = "MHVY_NoThreshold_Rep1_heatmap"
 
 #quality control and formatting
 well_positions = False #if you only have well positions and want the heatmap plotted per well
-q_filtering = True #filter cell values based on quantile thresholing
+q_filtering = False #filter cell values based on quantile thresholing
 q_val = 0.95 #if q filtering, the threshold to set the filter to
 debug_show_plot = False #set to True if you want to view the plot locally. May break plot save.
 
@@ -39,11 +39,11 @@ top_color = "#bb334c"
 
 #x and y axis data (these must match your column names EXACTLY)
 x_val = "Tissue"
-heat_val = "CCR3"
+heat_val = "MHV-Y"
 y_val = "Infection"
 
 #plot formatting
-title = "CCR3"
+title = "MHVY No Threshold"
 rotate_x = 90
 rotate_y = 0
 
