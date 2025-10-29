@@ -17,7 +17,7 @@ import re
 #Your Filename
 filename = "../datasets/yHV68_MHVY_chal_Rep1.csv"
 format_based_on_filename = False
-alternate_title = "MHVY_NoThreshold_Rep1_barplot"
+alternate_title = "CCR3_Threshold_Rep1_barplot"
 
 #formatting and debugging
 debug_show_plot = False #Set to True if you want to view the plot locally. May break saved file.
@@ -33,17 +33,17 @@ custom_colors = ["#AE3899","#CF92DD","#009933","#EDAB21"]
 white_overlay_palette = "Tissue"
 
 #Thresholding
-thresholding = False
+thresholding = True
 q = 0.95
 
 #x and y axis data (these must match your column names EXACTLY)
 x_vals = "Tissue"
-y_vals = "MHV-Y"
+y_vals = "CCR3"
 bar_split = "Infection"
 
 #plot formatting
 axis_rotate = 90
-title = "MHVY Threshold"
+title = "CCR3 Threshold"
 
 ####################################################################################################
 
