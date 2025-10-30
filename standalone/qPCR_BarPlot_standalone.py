@@ -34,7 +34,7 @@ white_overlay_palette = "Tissue"
 
 #q_filtering
 q_filtering = True
-q = 0.94
+q = 0.95
 
 #x and y axis data (these must match your column names EXACTLY)
 x_vals = "Tissue"
