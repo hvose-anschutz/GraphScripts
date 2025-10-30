@@ -4,6 +4,9 @@
 
 This is a basic overview of how this folder works. I recommend using a coding environment with this code as it will be easier to troubleshoot if things don't work as intended. I personally use VS Code, but I know Notepad++ is also a valid option. 
 
+# Requirements
+All install requirements are listed in references/requirements.txt. If you have this file, you can call `pip install -r requirements.txt` to automatically install all required packages.
+
 # Organization
 There are a number of folders in this repo that serve different purposes:
 
