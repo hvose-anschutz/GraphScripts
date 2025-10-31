@@ -15,9 +15,9 @@ import re
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 #Your Filename
-filename = "../datasets/yHV68_MHVY_chal_Rep2.csv"
+filename = "../datasets/Rep_2_qPCR_Results.csv"
 format_based_on_filename = False
-alternate_title = "yHV68_SuperThreshold_Rep2_barplot"
+alternate_title = "MHV_Rep_2_NoThreshold"
 
 #formatting and debugging
 debug_show_plot = False #Set to True if you want to view the plot locally. May break saved file.
@@ -33,17 +33,17 @@ custom_colors = ["#AE3899","#CF92DD","#009933","#EDAB21"]
 white_overlay_palette = "Tissue"
 
 #q_filtering
-q_filtering = True
+q_filtering = False
 q = 0.95
 
 #x and y axis data (these must match your column names EXACTLY)
 x_vals = "Tissue"
-y_vals = "gHV68"
+y_vals = "MHV-Y"
 bar_split = "Infection"
 
 #plot formatting
 axis_rotate = 90
-title = "yHV68 Super Threshold Rep 2"
+title = "MHVY No Threshold"
 
 ####################################################################################################
 
