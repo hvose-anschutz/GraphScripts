@@ -16,15 +16,15 @@ import sys
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 # Your Filename
-filename = "../datasets/yHV68_MHVY_chal_Rep1.csv"
+filename = "../datasets/Rep1_LOD.csv"
 format_based_on_filename = False
-alternate_title = "MHVY_NoThreshold_Rep1_heatmap"
+alternate_title = "CCR3_Threshold_Rep1"
 
 # quality control and formatting
 well_positions = (
     False  # if you only have well positions and want the heatmap plotted per well
 )
-q_filtering = False  # filter cell values based on quantile thresholing
+q_filtering = True  # filter cell values based on quantile thresholing
 q_val = 0.95  # if q filtering, the threshold to set the filter to
 debug_show_plot = (
     False  # set to True if you want to view the plot locally. May break plot save.
@@ -49,7 +49,7 @@ TissueOrder = [
 ]
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
-TreatmentOrder = ["Uninfected", "MHV-Y", "yHV68", "yHV68 + MHV-Y"]
+TreatmentOrder = ["Uninfected", "MHV-Y", "yHV68", "yHV68 and MHV-Y"]
 
 # Color Customization (sets the max value for the heatmap and generates a colormap)
 thresholding = (
@@ -60,11 +60,11 @@ top_color = "#bb334c"
 
 # x and y axis data (these must match your column names EXACTLY)
 x_val = "Tissue"
-heat_val = "MHV-Y"
+heat_val = "yHV68"
 y_val = "Infection"
 
 # plot formatting
-title = "MHVY No Threshold"
+title = "yHV68 Threshold"
 rotate_x = 90
 rotate_y = 0
 
@@ -116,6 +116,8 @@ else:
 
 # READ IN THE DATA
 DataSet = pd.read_csv(myCSV)
+
+print(DataSet.head())
 
 if well_positions == True:
     if q_filtering == True:

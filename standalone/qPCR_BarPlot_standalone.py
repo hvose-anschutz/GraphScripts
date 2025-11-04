@@ -15,9 +15,13 @@ import re
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 # Your Filename
-filename = "../datasets/Rep_2_qPCR_Results.csv"
+filename = "../datasets/Rep2_LOD.csv"
 format_based_on_filename = False
-alternate_title = "MHV_Rep_2_NoThreshold"
+alternate_title = "MHVY_Rep2_Threshold"
+
+# q_filtering
+q_filtering = True
+q = 0.95
 
 # formatting and debugging
 debug_show_plot = (
@@ -26,12 +30,10 @@ debug_show_plot = (
 
 # The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TissueOrder = [
-    "Adipose Tissue",
     "Cecum",
     "Distal Colon",
     "Liver",
     "mLN",
-    "Omentum",
     "PP",
     "Proximal Colon",
     "SI Zone A",
@@ -49,10 +51,6 @@ TreatmentOrder = ["Uninfected", "MHV-Y", "yHV68", "yHV68 + MHV-Y"]
 custom_colors = ["#AE3899", "#CF92DD", "#009933", "#EDAB21"]
 white_overlay_palette = "Tissue"
 
-# q_filtering
-q_filtering = False
-q = 0.95
-
 # x and y axis data (these must match your column names EXACTLY)
 x_vals = "Tissue"
 y_vals = "MHV-Y"
@@ -60,7 +58,7 @@ bar_split = "Infection"
 
 # plot formatting
 axis_rotate = 90
-title = "MHVY No Threshold"
+title = "MHVY Threshold"
 
 ####################################################################################################
 
