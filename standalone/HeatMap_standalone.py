@@ -3,14 +3,14 @@
 """Creates a HeatMap based on a provided dataset, with editable functions."""
 
 # NECESSARY IMPORTS
-import seaborn as sns
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 import os
 import math
 import re
 import sys
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 
 ####################################################################################################
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
@@ -84,7 +84,7 @@ def my_output_file(
     try:
         if extension in ["svg", "png", "pdf", "jpeg", "jpg"]:
             just_name = filename.split("/")
-            if csv == True:
+            if csv:
                 new_name = re.sub(
                     ".csv$",
                     "_Image" + plot_type + "." + extension,
