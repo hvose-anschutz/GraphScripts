@@ -19,9 +19,6 @@ DataSet = pd.read_csv(FileCSV,index_col = 0)       #Creates a 2D editable table
 #FIRST VARIABLE
 #TissueOrder = ["Colon"]	                       #Must edit for new dataset
 TissueOrder = ["mLN","PeyersPatch","Proximal Colon","Epithelial cells"]	       #A list of labels 
-#TreatmentOrder = ["ControlDiet","HiFiDiet"]
-#TreatmentOrder = ["Control","Amp","Vanc"]		   #Must edit for new dataset
-#TreatmentOrder = ["Control_Starch", "Control_AcStarch", "Amp_Starch", "Amp_AcStarch"]
 
 #SECOND (OPTIONAL) VARIABLE
 #TreatmentOrder = ["MHV-Y", "MHV-Y_dHE"]            #A list of labels
