@@ -1,35 +1,31 @@
 #!/usr/bin/env python3
 
-"""Generates a barplot with categorical swarmplot overlayed."""
+"""Creates a barplot with an overlayed stripplot with relevant statistical
+annotations for each statistically significant tissues."""
 
-# NECESSARY IMPORTS
-import seaborn as sns
-import pandas as pd
+import warnings
 import matplotlib.pyplot as plt
-import numpy as np
-import sys
-import os
-import re
+import pandas as pd
+import seaborn as sns
+from statannotations.Annotator import Annotator
 
+warnings.filterwarnings('ignore')
 ####################################################################################################
+
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 # Your Filename
-filename = "../datasets/Rep2_LOD.csv"
-format_based_on_filename = False
-alternate_title = "MHVY_Rep2_Threshold"
+FILENAME = "combined_qPCR_kn.csv"
 
-# q_filtering
-q_filtering = True
-q = 0.95
-
-# formatting and debugging
-debug_show_plot = (
-    False  # Set to True if you want to view the plot locally. May break saved file.
+# File Save Options
+SAVE_FIGURE = (
+    True  # Set to True if you want to save the plot.
 )
+OUTPUT_FILE = "combined_MHVY_filtered.svg"
 
 # The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
-TissueOrder = [
+TISSUE_ORDER = [
+    "Adipose Tissue Mat",
     "Cecum",
     "Distal Colon",
     "Liver",
@@ -41,114 +37,75 @@ TissueOrder = [
     "SI Zone C",
     "SI Zone D",
     "SI Zone E",
-    "Spleen",
+    "Spleen"
 ]
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
-TreatmentOrder = ["Uninfected", "MHV-Y", "yHV68", "yHV68 + MHV-Y"]
+TREATMENT_ORDER = ["Uninfected", "MHV-Y", "yHV68 and MHV-Y"]
+IGNORE_VALUES = ["yHV68"]
+
+# Statistical treatment
+STAT_FILTER = True
 
 # Color Customization (the white_overlay_palette should match the bar_split)
-custom_colors = ["#AE3899", "#CF92DD", "#009933", "#EDAB21"]
-white_overlay_palette = "Tissue"
+CUSTOM_COLORS = ["#EDAB21","#AE3899", "#009933"] #"#CF92DD"
+WHITE_OVERLAY = "Tissue"
 
 # x and y axis data (these must match your column names EXACTLY)
-x_vals = "Tissue"
-y_vals = "MHV-Y"
-bar_split = "Infection"
+X_VALS = "Tissue"
+Y_VALS = "MHV-Y"
+BAR_SPLIT = "Infection"
 
 # plot formatting
-axis_rotate = 90
-title = "MHVY Threshold"
+AXIS_ROTATE = 90
 
 ####################################################################################################
 
+qPCR_df = pd.read_csv(FILENAME)
 
-# FUNCTION DEFINITIONS
-def my_output_file(
-    filename: str, plot_type: str = "Plot", extension: str = "svg", csv: bool = True
-) -> str:
-    """Creates a regex to rename the output file based on the original .csv file. The plot type adds the name of
-    the plot to the filename, and the extension specifies what file format to save (svg, png, jpeg, or pdf).
-    """
-    try:
-        if extension in ["svg", "png", "pdf", "jpeg", "jpg"]:
-            just_name = filename.split("/")
-            if csv == True:
-                new_name = re.sub(
-                    ".csv$",
-                    "_Image" + plot_type + "." + extension,
-                    just_name[::-1][0],
-                    1,
-                )
-            else:
-                new_name = filename + "_Image" + plot_type + "." + extension
-            return os.getcwd() + "/" + new_name
-    except AttributeError:
-        print(
-            "_io.TextIOWrapper object has no attribute 'split'. Double check that the filename passed is a string."
-        )
-        sys.exit(1)
+print(qPCR_df.shape[0])
 
+if STAT_FILTER:
+    Q1 = qPCR_df[Y_VALS].quantile(0.25)
+    Q3 = qPCR_df[Y_VALS].quantile(0.75)
+    IQR = Q3 - Q1
 
-# PROCESS THE FILE
-# FileCSV = myfunc.get_file_from_cmd()
-# FileCSV = "qPCR_test.csv"
-if format_based_on_filename == True:
-    mySVGOut = my_output_file(
-        filename, plot_type="Bar", extension="svg"
-    )  # Generates a regular expression to automate the output filename
+    low_bound = Q1 - (1.5 * IQR)
+    high_bound = Q3 + (1.5 * IQR)
+    filtered_df = qPCR_df[(qPCR_df[Y_VALS] >= low_bound) & (qPCR_df[Y_VALS] <= high_bound)]
 else:
-    mySVGOut = my_output_file(
-        alternate_title, plot_type="Bar", extension="svg", csv=False
-    )
+    filtered_df = qPCR_df
 
-# READ IN THE DATA
-DataSet = pd.read_csv(filename, header=0)  # Creates a 2D editable table
+if len(IGNORE_VALUES) > 0:
+    for rem in IGNORE_VALUES:
+        filtered_df = filtered_df[filtered_df[BAR_SPLIT] != rem]
 
-# DataSet[(np.abs(stats.zscore(DataSet)) < 3).all(axis=1)]
 
-# ATTEMPT TO REMOVE OUTLIERS
-if q_filtering == True:
-    q_val = DataSet[y_vals].quantile(q)
+print(filtered_df.head())
+#print(qPCR_df.shape[0])
 
-    final_df = DataSet[DataSet[y_vals] < q_val]
-else:
-    final_df = DataSet
-
-# separate out the relative sample distinctions (need them to be separate for labeling purposes)
-# DataSet[['Mouse', 'Tissue']] = DataSet['Tissue & Sample ID'].str.split(' - ', n=1, expand=True)
-
-# print(DataSet.head())
-
-# FIRST VARIABLE
-# TissueOrder = ["Colon"]	                       #Must edit for new dataset, a list of labels
-
-# SECOND (OPTIONAL) VARIABLE
-# TreatmentOrder = ["MHV-Y", "MHV-Y_dHE"]            #A list of labels
-# TreatmentOrder = ["SPF", "GF"]
-# TreatmentOrder = ["WT", "CD64-creSTING-flox"]
-
-# GENERATE COLOR WHEELS
-
-WhiteWheel = ["#FFFFFF"] * len(list(set(DataSet[white_overlay_palette])))
+###################################################################################################
+WhiteWheel = ["#FFFFFF"] * len(list(set(filtered_df[WHITE_OVERLAY])))
 
 # GENERATE THE BARPLOT
-### Note: The x, y, and hue axes should be the same for both the catplot and the swarmplot, as this allows seaborn to map the dots correctly to each bar.
-### The palette for the swarmplot should be the WhiteWheel generated above, as it will force all dots to be the same color.
+### Note: The x, y, and hue axes should be the same for both the catplot and the swarmplot, as this
+# allows seaborn to map the dots correctly to each bar.
+### The palette for the swarmplot should be the WhiteWheel generated above, as it will force all
+# dots to be the same color.
 
 g = sns.catplot(
-    data=final_df,
+    data=filtered_df,
     kind="bar",  # specifies the kind of categorical plot
     # row = "Tissue",            #determines the faceting of the grid, creates separate plots
-    x=x_vals,  # x axis data
-    y=y_vals,  # y axis data
-    hue=bar_split,  # defines how the bars will be split
-    order=TissueOrder,  # defines the order of the tissues on the x axis
-    # hue_order = TreatmentOrder, #defines the order of the treatment on the X axis
+    x=X_VALS, # x axis data
+    y=Y_VALS, # y axis data
+    hue=BAR_SPLIT,  # defines how the bars will be split
+    order=TISSUE_ORDER,  # defines the order of the tissues on the x axis
+    hue_order = TREATMENT_ORDER, #defines the order of the treatment on the X axis
     errorbar="sd",  # specifies whether using an error bar or a confidence interval
     err_kws={"linewidth": 0.75},  # line width of the error bar
     capsize=0.1,  # controls the cap of the stdev whisker
-    palette=custom_colors,  # controls the colors on the graph, each value of Treatment must have a hex code
+    palette=CUSTOM_COLORS,  # controls the colors on the graph, each value must have a hex code
     saturation=1,  # controls the saturation of the color (1 is full, 0 is black and white)
     height=6,  # controls the height of the graph
     aspect=1.2,  # controls the aspect ratio of the output graph, 4 Categories
@@ -165,16 +122,52 @@ g.legend.set_title(
     ""
 )  # sets the plot title to be empty, default will pull from the data
 
+###################################################################################################
+pairs = []
+
+for tis in TISSUE_ORDER:
+    for treat in range(0,len(TREATMENT_ORDER)-1):
+        for idx, treat2 in enumerate(TREATMENT_ORDER):
+            if treat < idx:
+                pair1 = TREATMENT_ORDER[treat]
+                pair2 = treat2
+                new_pair = ((tis,pair1),(tis,pair2))
+                pairs.append(new_pair)
+
+#print(pairs)
+
+for ax_row in g.axes:
+    for my_ax in ax_row:
+        annot = Annotator(my_ax,
+                          pairs,
+                          data=filtered_df,
+                          x=X_VALS,
+                          y=Y_VALS,
+                          hue=BAR_SPLIT,
+                          order=TISSUE_ORDER,
+                          hue_order=TREATMENT_ORDER)
+        annot.configure(test='Mann-Whitney',
+                        text_format='star',
+                        loc='inside',
+                        hide_non_significant=True,
+                        verbose=2,
+                        line_height=0,
+                        line_offset_to_group=0.05)
+        annot.apply_test().annotate()
+
+###################################################################################################
+
 # DRAW CATEGORICAL SWARMPLOT TO SHOW OBSERVATIONS
 
-ax = sns.swarmplot(
-    data=final_df,
-    x=x_vals,  # x axis data
-    y=y_vals,  # y axis data
-    hue=bar_split,  # category separating the data by color
+ax = sns.stripplot(
+    data=filtered_df,
+    x=X_VALS,  # x axis data
+    y=Y_VALS,  # y axis data
+    hue=BAR_SPLIT,  # category separating the data by color
+    jitter=True,
     dodge=True,  # Makes ure the dots are not plotted in the same column
-    order=TissueOrder,  # specifies the order of data on the plot
-    # hue_order = TreatmentOrder, #defines the order of the second variable on the X axis
+    order=TISSUE_ORDER,  # specifies the order of data on the plot
+    hue_order = TREATMENT_ORDER, #defines the order of the second variable on the X axis
     palette=WhiteWheel,  # defines color palette to make sure every dot is white
     edgecolor="black",  # defines the edge color of the dots
     size=3,  # defines size of dot
@@ -183,8 +176,12 @@ ax = sns.swarmplot(
 )
 
 ax.set(ylim=(0, None))  # limits the y axis range
-ax.set_xticklabels(ax.get_xticklabels(), rotation=axis_rotate)
-ax.set_title(title)
+ax.set_xticklabels(ax.get_xticklabels(), rotation=AXIS_ROTATE)
+ax.set_title("")
+ax.spines['bottom'].set_linewidth(2)
+ax.spines['left'].set_linewidth(2)
+# ax.tick_params(axis='both', which='major', labelsize=12, width=2)
+# ax.tick_params(axis='both', which='minor', width=2)
 # g._legend.remove()             #removes the legend from the plot
 
 # SHOW / SAVE THE PLOT
@@ -192,8 +189,6 @@ ax.set_title(title)
 g.set_xlabels("")
 g.set_ylabels("")
 
-if debug_show_plot == True:
-    plt.show()
-plt.savefig(
-    mySVGOut, bbox_inches="tight"
-)  # saves the file to the generated_images folder
+if SAVE_FIGURE:
+    plt.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
+plt.show()
