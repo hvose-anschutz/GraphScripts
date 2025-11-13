@@ -15,45 +15,34 @@ warnings.filterwarnings('ignore')
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 # Your Filename
-FILENAME = "combined_qPCR_kn.csv"
+FILENAME = "../datasets/combined_qPCR_kn.csv"
 
 # File Save Options
 SAVE_FIGURE = (
     True  # Set to True if you want to save the plot.
 )
-OUTPUT_FILE = "combined_MHVY_filtered.svg"
+OUTPUT_FILE = "combined_spleen_yHV68_filtered.svg"
 
 # The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TISSUE_ORDER = [
-    "Adipose Tissue Mat",
-    "Cecum",
-    "Distal Colon",
-    "Liver",
-    "mLN",
-    "PP",
-    "Proximal Colon",
-    "SI Zone A",
-    "SI Zone B",
-    "SI Zone C",
-    "SI Zone D",
-    "SI Zone E",
     "Spleen"
 ]
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
-TREATMENT_ORDER = ["Uninfected", "MHV-Y", "yHV68 and MHV-Y"]
-IGNORE_VALUES = ["yHV68"]
+TREATMENT_ORDER = ["Uninfected", "yHV68", "yHV68 and MHV-Y"]
+IGNORE_VALUES = ["MHV-Y"]
 
-# Statistical treatment
+# Statistical filtering and formatting
 STAT_FILTER = True
+LINE_PLACE = 'inside'
 
 # Color Customization (the white_overlay_palette should match the bar_split)
-CUSTOM_COLORS = ["#EDAB21","#AE3899", "#009933"] #"#CF92DD"
+CUSTOM_COLORS = ["#EDAB21","#AE3899", "#009933"] #"#CF92DD",
 WHITE_OVERLAY = "Tissue"
 
 # x and y axis data (these must match your column names EXACTLY)
 X_VALS = "Tissue"
-Y_VALS = "MHV-Y"
+Y_VALS = "yHV68"
 BAR_SPLIT = "Infection"
 
 # plot formatting
@@ -148,11 +137,11 @@ for ax_row in g.axes:
                           hue_order=TREATMENT_ORDER)
         annot.configure(test='Mann-Whitney',
                         text_format='star',
-                        loc='inside',
+                        loc=LINE_PLACE,
                         hide_non_significant=True,
                         verbose=2,
                         line_height=0,
-                        line_offset_to_group=0.05)
+                        line_offset_to_group=0)
         annot.apply_test().annotate()
 
 ###################################################################################################
