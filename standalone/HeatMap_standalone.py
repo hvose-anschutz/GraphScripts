@@ -14,9 +14,12 @@ import matplotlib.pyplot as plt
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 # Your Filename
-FILENAME = "../datasets/combined_qPCR_kn.csv"
+FILENAME = sys.argv[1]
 FORMAT_BASED_FILENAME = False
 ALT_TITLE = "MHVY_combined_reps"
+
+# If df is pre-formatted without multiple categorical columns
+READ_ONLY = True
 
 # quality control and formatting
 WELL_POSITIONS = (
@@ -28,7 +31,7 @@ STAT_FILTER = True
 SAVE_FIGURE = True
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
-IGNORE_VALUES = ["yHV68"]
+IGNORE_VALUES = ["yHV68","Uninfected"]
 
 # Color Customization (sets the max value for the heatmap and generates a colormap)
 THRESHOLDING = (
@@ -96,54 +99,67 @@ else:
 ####################################################################################################
 
 heatmap_df = pd.read_csv(FILENAME)
-
-#print(heatmap_df.head())
-
-if STAT_FILTER:
-    Q1 = heatmap_df[HEAT_VAL].quantile(0.25)
-    Q3 = heatmap_df[HEAT_VAL].quantile(0.75)
-    IQR = Q3 - Q1
-
-    low_bound = Q1 - (1.5 * IQR)
-    high_bound = Q3 + (1.5 * IQR)
-    filtered_df = heatmap_df[(heatmap_df[HEAT_VAL] >= low_bound) &
-                             (heatmap_df[HEAT_VAL] <= high_bound)]
-else:
-    filtered_df = heatmap_df
-
-if len(IGNORE_VALUES) > 0:
-    for rem in IGNORE_VALUES:
-        filtered_df = filtered_df[filtered_df[Y_VAL] != rem]
-
-print(filtered_df.head())
-#print(qPCR_df.shape[0])
-
-###################################################################################################
-
-if WELL_POSITIONS:
-    filtered_df["row"] = filtered_df["Well Positions"].str.extract(r"([A-Za-z]+)")
-    filtered_df["column"] = filtered_df["Well Positions"].str.extract(r"(\d+)").astype(int)
-    vmax_val = filtered_df[HEAT_VAL].max()
-    heatmap_data = filtered_df.pivot(index="row", columns="column", values=HEAT_VAL)
-else:
-    vmax_val = filtered_df[HEAT_VAL].max()
-    means = filtered_df.groupby([X_VAL, Y_VAL])[HEAT_VAL].mean().reset_index()
-    heatmap_data = means.pivot(index=X_VAL, columns=Y_VAL, values=HEAT_VAL)
-
-# SET AESTHETICS
 Pal = sns.light_palette(TOP_COLOR, as_cmap=True)
 
-if not THRESHOLDING:
-    vmin_val = 0
+if not READ_ONLY:
+    if STAT_FILTER:
+        Q1 = heatmap_df[HEAT_VAL].quantile(0.25)
+        Q3 = heatmap_df[HEAT_VAL].quantile(0.75)
+        IQR = Q3 - Q1
+
+        low_bound = 0
+        high_bound = Q3 + (1.5 * IQR)
+        filtered_df = heatmap_df[(heatmap_df[HEAT_VAL] >= low_bound) &
+                                (heatmap_df[HEAT_VAL] <= high_bound)]
+    else:
+        filtered_df = heatmap_df
+
+    if len(IGNORE_VALUES) > 0:
+        for rem in IGNORE_VALUES:
+            filtered_df = filtered_df[filtered_df[Y_VAL] != rem]
+
+    #print(filtered_df.head())
+    #print(qPCR_df.shape[0])
+
+    ###################################################################################################
+
+    if WELL_POSITIONS:
+        filtered_df["row"] = filtered_df["Well Positions"].str.extract(r"([A-Za-z]+)")
+        filtered_df["column"] = filtered_df["Well Positions"].str.extract(r"(\d+)").astype(int)
+        vmax_val = filtered_df[HEAT_VAL].max()
+        heatmap_data = filtered_df.pivot(index="row", columns="column", values=HEAT_VAL)
+    else:
+        vmax_val = filtered_df[HEAT_VAL].max()
+        means = filtered_df.groupby([X_VAL,Y_VAL])[HEAT_VAL].mean().reset_index()
+        heatmap_data = means.pivot(index=X_VAL, columns=Y_VAL, values=HEAT_VAL)
+
+    if not THRESHOLDING:
+        vmin_val = 0
+    else:
+        vmin_val = THRESHOLD
+        Pal.set_under(color="#ffffff")
+
+
+    # lut = dict(zip(TnType.unique(), "rbg"))
+    # row_col = TnType.map(lut)
+    # Sets color palette to be in the range from White to a Saturated Color,
+    # should be set to the color of the year
 else:
-    vmin_val = THRESHOLD
-    Pal.set_under(color="#ffffff")
+    if STAT_FILTER:
+        Q1 = heatmap_df.quantile(0.25)
+        Q3 = heatmap_df.quantile(0.75)
 
+        IQR = Q3-Q1
 
-# lut = dict(zip(TnType.unique(), "rbg"))
-# row_col = TnType.map(lut)
-# Sets color palette to be in the range from White to a Saturated Color,
-# should be set to the color of the year
+        upper_bound = Q3 + (1.5 * IQR)
+
+        heatmap_data = heatmap_df[heatmap_df > upper_bound] = None
+    
+    if not THRESHOLDING:
+        vmin_val = 0
+    else:
+        vmin_val = THRESHOLD
+        Pal.set_under(color="#ffffff")
 
 # GENERATE THE HEATMAP
 g = sns.heatmap(

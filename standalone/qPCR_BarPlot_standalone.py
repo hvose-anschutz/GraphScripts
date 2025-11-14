@@ -21,11 +21,11 @@ FILENAME = "../datasets/combined_qPCR_kn.csv"
 SAVE_FIGURE = (
     True  # Set to True if you want to save the plot.
 )
-OUTPUT_FILE = "combined_spleen_yHV68_filtered.svg"
+OUTPUT_FILE = "combined_cecum_yHV68_raw.svg"
 
 # The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TISSUE_ORDER = [
-    "Spleen"
+    "Cecum"
 ]
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
@@ -33,11 +33,11 @@ TREATMENT_ORDER = ["Uninfected", "yHV68", "yHV68 and MHV-Y"]
 IGNORE_VALUES = ["MHV-Y"]
 
 # Statistical filtering and formatting
-STAT_FILTER = True
-LINE_PLACE = 'inside'
+STAT_FILTER = False
+LINE_PLACE = 'outside'
 
 # Color Customization (the white_overlay_palette should match the bar_split)
-CUSTOM_COLORS = ["#EDAB21","#AE3899", "#009933"] #"#CF92DD",
+CUSTOM_COLORS = ["#EDAB21","#AE3899", "#CF92DD"]
 WHITE_OVERLAY = "Tissue"
 
 # x and y axis data (these must match your column names EXACTLY)
@@ -59,7 +59,7 @@ if STAT_FILTER:
     Q3 = qPCR_df[Y_VALS].quantile(0.75)
     IQR = Q3 - Q1
 
-    low_bound = Q1 - (1.5 * IQR)
+    low_bound = 0
     high_bound = Q3 + (1.5 * IQR)
     filtered_df = qPCR_df[(qPCR_df[Y_VALS] >= low_bound) & (qPCR_df[Y_VALS] <= high_bound)]
 else:
@@ -180,4 +180,4 @@ g.set_ylabels("")
 
 if SAVE_FIGURE:
     plt.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
-plt.show()
+#plt.show()
