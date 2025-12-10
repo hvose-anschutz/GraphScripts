@@ -15,35 +15,35 @@ import matplotlib.pyplot as plt
 
 # Your Filename
 FILENAME = sys.argv[1]
-FORMAT_BASED_FILENAME = False
-ALT_TITLE = "MHVY_combined_reps"
+FORMAT_BASED_FILENAME = True
+ALT_TITLE = "Supernatant_IRG_REDO"
 
 # If df is pre-formatted without multiple categorical columns
-READ_ONLY = True
+READ_ONLY = False
 
 # quality control and formatting
 WELL_POSITIONS = (
-    False  # if you only have well positions and want the heatmap plotted per well
+    True  # if you only have well positions and want the heatmap plotted per well
 )
 
-STAT_FILTER = True
+STAT_FILTER = False
 
 SAVE_FIGURE = True
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
-IGNORE_VALUES = ["yHV68","Uninfected"]
+IGNORE_VALUES = []
 
 # Color Customization (sets the max value for the heatmap and generates a colormap)
 THRESHOLDING = (
     False  # determines if all values under a certain threshold should be the same color
 )
-THRESHOLD = 1.32
+THRESHOLD = 0
 TOP_COLOR = "#bb334c"
 
 # x and y axis data (these must match your column names EXACTLY)
-X_VAL = "Tissue"
-HEAT_VAL = "MHV-Y"
-Y_VAL = "Infection"
+X_VAL = "Sample"
+HEAT_VAL = "LogValue"
+Y_VAL = "log(MOI)"
 
 # plot formatting
 ROTATE_X = 90
@@ -154,6 +154,8 @@ else:
         upper_bound = Q3 + (1.5 * IQR)
 
         heatmap_data = heatmap_df[heatmap_df > upper_bound] = None
+    else:
+        heatmap_data = heatmap_df
     
     if not THRESHOLDING:
         vmin_val = 0

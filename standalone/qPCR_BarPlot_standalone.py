@@ -15,35 +15,36 @@ warnings.filterwarnings('ignore')
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 # Your Filename
-FILENAME = "../datasets/combined_qPCR_kn.csv"
+FILENAME = "../datasets/20251208_IRG_REDO.csv"
 
 # File Save Options
 SAVE_FIGURE = (
-    True  # Set to True if you want to save the plot.
+    False # Set to True if you want to save the plot.
 )
-OUTPUT_FILE = "combined_cecum_yHV68_raw.svg"
+OUTPUT_FILE = "IRG1_qPCR.svg"
 
 # The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TISSUE_ORDER = [
-    "Cecum"
+    "WT",
+    "KO"
 ]
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
-TREATMENT_ORDER = ["Uninfected", "yHV68", "yHV68 and MHV-Y"]
-IGNORE_VALUES = ["MHV-Y"]
+TREATMENT_ORDER = ["MHV-Y","MHV-A59"]
+IGNORE_VALUES = []
 
 # Statistical filtering and formatting
-STAT_FILTER = False
+STAT_FILTER = True
 LINE_PLACE = 'outside'
 
 # Color Customization (the white_overlay_palette should match the bar_split)
 CUSTOM_COLORS = ["#EDAB21","#AE3899", "#CF92DD"]
-WHITE_OVERLAY = "Tissue"
+WHITE_OVERLAY = "IRG"
 
 # x and y axis data (these must match your column names EXACTLY)
-X_VALS = "Tissue"
-Y_VALS = "yHV68"
-BAR_SPLIT = "Infection"
+X_VALS = "IRG"
+Y_VALS = "Value"
+BAR_SPLIT = "Viral Genotype"
 
 # plot formatting
 AXIS_ROTATE = 90
@@ -180,4 +181,4 @@ g.set_ylabels("")
 
 if SAVE_FIGURE:
     plt.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
-#plt.show()
+plt.show()
