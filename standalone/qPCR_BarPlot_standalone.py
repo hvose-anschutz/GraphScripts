@@ -15,26 +15,37 @@ warnings.filterwarnings('ignore')
 # PUT ALL VARIABLES FROM YOUR DATASET HERE! THERE IS NO NEED TO EDIT THE CODE BELOW #
 
 # Your Filename
-FILENAME = "../datasets/20251208_IRG_REDO.csv"
+FILENAME = "../datasets/Intracellular_20251208.csv"
 
 # File Save Options
 SAVE_FIGURE = (
     False # Set to True if you want to save the plot.
 )
-OUTPUT_FILE = "IRG1_qPCR.svg"
+OUTPUT_FILE = "MHVY_Supernatant_bar_qPCR.png"
+
+# Filtering out by another column
+EXTRA_FILTER = True
+FILTER_COL = "Viral Genotype"
+FILTER_VAL = "MHV-Y"
 
 # The order of tissues to plot on the graph (these must match the names in your file EXACTLY)
 TISSUE_ORDER = [
-    "WT",
-    "KO"
+    1,
+    0,
+    -1,
+    -2,
+    -3,
+    -4,
+    -5,
+    -6
 ]
 
 # Treatment/Infection Order (these must match the secondary names in your file EXACTLY)
-TREATMENT_ORDER = ["MHV-Y","MHV-A59"]
+TREATMENT_ORDER = ["WT","KO"]
 IGNORE_VALUES = []
 
 # Statistical filtering and formatting
-STAT_FILTER = True
+STAT_FILTER = False
 LINE_PLACE = 'outside'
 
 # Color Customization (the white_overlay_palette should match the bar_split)
@@ -42,16 +53,20 @@ CUSTOM_COLORS = ["#EDAB21","#AE3899", "#CF92DD"]
 WHITE_OVERLAY = "IRG"
 
 # x and y axis data (these must match your column names EXACTLY)
-X_VALS = "IRG"
-Y_VALS = "Value"
-BAR_SPLIT = "Viral Genotype"
+X_VALS = "log(MOI)"
+Y_VALS = "LogValue"
+BAR_SPLIT = "IRG"
 
 # plot formatting
 AXIS_ROTATE = 90
 
 ####################################################################################################
 
-qPCR_df = pd.read_csv(FILENAME)
+if EXTRA_FILTER:
+    qPCR_load = pd.read_csv(FILENAME)
+    qPCR_df = qPCR_load[qPCR_load[FILTER_COL] == FILTER_VAL]
+else:
+    qPCR_df = pd.read_csv(FILENAME)
 
 print(qPCR_df.shape[0])
 
